@@ -1,0 +1,34 @@
+{
+  "name": "zikei-send",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "description": "Browser-to-browser P2P file sharing (WebRTC) hosted fully on Netlify.",
+  "scripts": {
+    "dev": "vite",
+    "dev:signal": "node scripts/dev-signaling.mjs",
+    "dev:local": "node scripts/dev-signaling.mjs & vite",
+    "netlify:dev": "netlify dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node --test test/*.test.mjs",
+    "check": "npm test && npm run build",
+    "deploy": "netlify deploy --build --prod",
+    "deploy:preview": "netlify deploy --build"
+  },
+  "dependencies": {
+    "@netlify/server": "latest",
+    "qrcode.react": "^4.2.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.0.0",
+    "netlify-cli": "^27.17.0",
+    "vite": "^7.0.0",
+    "ws": "^8.18.0"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

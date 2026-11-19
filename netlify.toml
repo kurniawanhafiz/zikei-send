@@ -1,0 +1,41 @@
+# Zikei Send - Netlify configuration
+# Git-based auto deploy: connect the repo in Netlify (Add new project > Import an existing project).
+# Every push to the production branch runs `build.command` below and publishes `dist/`.
+# CLI deploy:  npm run deploy   (= netlify deploy --build --prod)
+
+[build]
+  command = "npm test && npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Netlify Server requires Node.js 24 or later (build and runtime use the same major).
+  NODE_VERSION = "24"
+
+# The signaling server is netlify/server/index.mjs. It declares its own routes
+# (/ws, /ice, /health) via `export const config`. IMPORTANT: do NOT add a catch-all
+# rewrite such as `/* /index.html 200` - it would send /ws to the static app instead of the server.
+
+[dev]
+  framework = "#custom"
+  command = "npm run dev"
+  targetPort = 5173
+  port = 8888
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer"
+    X-Frame-Options = "DENY"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' wss: https:; worker-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
